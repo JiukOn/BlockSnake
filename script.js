@@ -2,7 +2,10 @@ let canvas = document.getElementById("snake");
 let context = canvas.getContext("2d");
 let box = 32;
 let direction = "right";
-
+let food = {
+    x: Math.floor(Math.random() * 15 + 1) * box,
+    y: Math.floor(Math.random() * 15 + 1) * box
+}
 
 let snake = [];
 snake[0] = {
@@ -23,6 +26,13 @@ function mkSnake(){
         context.fillRect(snake[i].x, snake[i].y, box, box);
         context.strokeRect(snake[i].x, snake[i].y, box, box);
     }
+}
+
+function mkFood(){
+    context.fillStyle = 'rgb(250,10,10)'
+    context.strokeStyle = 'rgb(50, 120, 120)';
+    context.fillRect(food.x,food.y,box,box);
+    context.strokeRect(food.x,food.y,box,box);
 }
 
 function update(event){
@@ -50,6 +60,7 @@ function StartGame(){
 
     mkBG();
     mkSnake();
+    mkFood();
 
     let snakex = snake[0].x;
     let snakey = snake[0].y;
@@ -59,14 +70,22 @@ function StartGame(){
     if(direction == "up") snakey -= box;
     if(direction == "down") snakey += box;
 
-    snake.pop();
+    if(snakex != food.x || snakey != food.y){
+        snake.pop();
+    
+    }else{
+        food.x = Math.floor(Math.random() * 15 + 1) * box;
+        food.y = Math.floor(Math.random() * 15 + 1) * box;
+    }
 
-    let newHead = {
+  
+
+    let snakeHead = {
         x: snakex,
         y: snakey
     }
 
-    snake.unshift(newHead);
+    snake.unshift(snakeHead);
 }
 
 let Game = setInterval(StartGame,100);
